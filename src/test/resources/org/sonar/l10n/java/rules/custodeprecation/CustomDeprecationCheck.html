@@ -1,0 +1,17 @@
+<h2>Why is this an issue?</h2>
+<p>This rule detects usage of APIs marked as deprecated in your project's configuration.</p>
+
+<h2>Configuration</h2>
+<p>Configure the deprecated APIs in the <code>deprecatedApis</code> rule parameter as a JSON array.</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+OldApi api = new OldApi();
+api.oldMethod(); // Noncompliant
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+NewApi api = new NewApi();
+api.newMethod();
+</pre>

@@ -1,0 +1,101 @@
+<h2>Why is this an issue?</h2>
+<p>This rule detects usage of APIs marked as deprecated in your project's configuration.</p>
+
+<h2>Configuration</h2>
+<p>Configure the deprecated APIs in the <code>deprecatedApis</code> rule parameter as a JSON array of objects.</p>
+
+<h3>JSON Format Specification</h3>
+<p>Each element in the array must contain the following fields:</p>
+<table>
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Required</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>fqcn</code></td>
+    <td>string</td>
+    <td>Yes</td>
+    <td>Fully qualified class name (e.g., <code>com.example.OldApi</code>)</td>
+  </tr>
+  <tr>
+    <td><code>member</code></td>
+    <td>string</td>
+    <td>Yes</td>
+    <td>Method or field name. Use <code>&lt;init&gt;</code> for constructors</td>
+  </tr>
+  <tr>
+    <td><code>signature</code></td>
+    <td>string</td>
+    <td>No</td>
+    <td>JVM method descriptor (e.g., <code>(Ljava/lang/String;)V</code>). When null or omitted, all overloads are targeted</td>
+  </tr>
+  <tr>
+    <td><code>migration</code></td>
+    <td>string</td>
+    <td>Yes</td>
+    <td>Recommended action or replacement API</td>
+  </tr>
+  <tr>
+    <td><code>note</code></td>
+    <td>string</td>
+    <td>No</td>
+    <td>Additional context or version information</td>
+  </tr>
+</table>
+
+<h3>JVM Signature Format</h3>
+<p>The <code>signature</code> field uses JVM descriptor notation:</p>
+<ul>
+  <li><code>I</code> = int, <code>Z</code> = boolean, <code>V</code> = void, <code>J</code> = long, <code>F</code> = float, <code>D</code> = double</li>
+  <li><code>Ljava/lang/String;</code> = String class</li>
+  <li><code>(Ljava/lang/String;I)V</code> = method taking String and int, returning void</li>
+  <li><code>[Ljava/lang/String;</code> = String[] array</li>
+</ul>
+
+<h3>Example Configuration</h3>
+<pre>
+[
+  {
+    "fqcn": "com.example.OldApi",
+    "member": "oldMethod",
+    "signature": null,
+    "migration": "Use com.example.NewApi#newMethod() instead",
+    "note": "Will be removed in v3.0"
+  },
+  {
+    "fqcn": "com.example.Constants",
+    "member": "OLD_CONSTANT",
+    "signature": null,
+    "migration": "Use Constants.NEW_CONSTANT",
+    "note": ""
+  },
+  {
+    "fqcn": "com.example.Api",
+    "member": "process",
+    "signature": "(Ljava/lang/String;)V",
+    "migration": "Use processNew(String) instead",
+    "note": "Only the String variant is deprecated"
+  },
+  {
+    "fqcn": "com.example.Builder",
+    "member": "&lt;init&gt;",
+    "signature": "(Ljava/lang/String;Ljava/lang/String;)V",
+    "migration": "Use the builder pattern instead",
+    "note": "Specific constructor signature"
+  }
+]
+</pre>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+OldApi api = new OldApi();
+api.oldMethod(); // Noncompliant
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+NewApi api = new NewApi();
+api.newMethod();
+</pre>
