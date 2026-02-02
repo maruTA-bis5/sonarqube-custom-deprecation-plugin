@@ -210,7 +210,9 @@
           <pluginClass>net.bis5.sonarqube.customdeprecation.CustomDeprecationPlugin</pluginClass>
           <pluginName>Custom Deprecation</pluginName>
           <pluginDescription>Detects usage of project-specific deprecated APIs</pluginDescription>
-          <requirePlugins>sonar-java</requirePlugins>
+          <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
+          <requirePlugins>java:${sonarjava.version}</requirePlugins>
+          <requiredForLanguages>java</requiredForLanguages>
           <pluginIssueTrackerUrl>https://github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin/issues</pluginIssueTrackerUrl>
           <sonarQubeMinVersion>9.9</sonarQubeMinVersion>
           <jreMinVersion>17</jreMinVersion>

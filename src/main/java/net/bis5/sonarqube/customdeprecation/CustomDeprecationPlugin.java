@@ -5,7 +5,7 @@ import org.sonar.api.Plugin;
 
 /**
  * SonarQube plugin entry point for the Custom Deprecation rule.
- * Registers the rule definition and check implementation for detecting usage of project-specific deprecated APIs.
+ * Registers the rule definition and check registrar for detecting usage of project-specific deprecated APIs.
  */
 public class CustomDeprecationPlugin implements Plugin {
 
@@ -17,6 +17,6 @@ public class CustomDeprecationPlugin implements Plugin {
     @Override
     public void define(Context context) {
         context.addExtension(CustomDeprecationRulesDefinition.class);
-        context.addExtension(CustomDeprecationCheck.class);
+        context.addExtension(CustomDeprecationCheckRegistrar.class);
     }
 }
