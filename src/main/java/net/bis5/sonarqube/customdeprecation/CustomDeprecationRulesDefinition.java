@@ -41,7 +41,7 @@ public class CustomDeprecationRulesDefinition implements RulesDefinition {
             .setType(RuleParamType.STRING)
             .setDefaultValue("[]")
             .setDescription("JSON array of deprecated API configurations. "
-                + "Each entry must contain fqcn, member, optional signature, migration, and optional note.");
+                + "Each entry must contain fqcn, member, optional arguments, migration, and optional note.");
 
         repository.done();
     }

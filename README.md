@@ -22,12 +22,14 @@ In the SonarQube rule settings, configure the `deprecatedApis` parameter of the 
   {
     "fqcn": "com.example.library.OldClass",
     "member": "legacyMethod",
-    "signature": "(Ljava/lang/String;)V",
+    "arguments": "(java.lang.String)",
     "migration": "Use com.example.library.NewClass#newMethod() instead",
     "note": "This method will be removed in version 3.0"
   }
 ]
 ```
+
+Arguments are specified in source-style notation: use `()` for no-arg methods or constructors, separate multiple types with commas, and represent arrays/varargs as `java.lang.String[]`. Set `arguments` to `"()"` to target only the no-arg overload; set it to `null` (or omit it) to target all overloads of the member.
 
 ## Multiple configuration example
 ```json
@@ -35,21 +37,21 @@ In the SonarQube rule settings, configure the `deprecatedApis` parameter of the 
   {
     "fqcn": "com.example.library.OldClass",
     "member": "legacyMethod",
-    "signature": null,
+    "arguments": null,
     "migration": "Use com.example.library.NewClass#newMethod() instead",
     "note": ""
   },
   {
     "fqcn": "com.example.library.Constants",
     "member": "OLD_CONSTANT",
-    "signature": null,
+    "arguments": null,
     "migration": "Use Constants.NEW_CONSTANT",
     "note": ""
   },
   {
     "fqcn": "com.example.library.DeprecatedClass",
     "member": "<init>",
-    "signature": "(Ljava/lang/String;Ljava/lang/String;)V",
+    "arguments": "(java.lang.String,java.lang.String)",
     "migration": "Use Builder pattern instead",
     "note": "Constructor with all parameters"
   }

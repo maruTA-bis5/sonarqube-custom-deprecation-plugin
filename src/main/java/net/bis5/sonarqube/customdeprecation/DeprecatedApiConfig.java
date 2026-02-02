@@ -14,7 +14,7 @@ import java.util.List;
 public class DeprecatedApiConfig {
     private String fqcn;
     private String member;
-    private String signature;
+    private String arguments;
     private String migration;
     private String note;
 
@@ -38,13 +38,13 @@ public class DeprecatedApiConfig {
     }
 
     /**
-     * Gets the JVM method descriptor for the deprecated API.
+     * Gets the argument list for the deprecated API in source-style notation.
      * May be null to match all overloads of the member.
      *
-     * @return the JVM signature (e.g., "(Ljava/lang/String;)V"), or null for all overloads
+     * @return the arguments list (e.g., "(java.lang.String,int)"), or null for all overloads
      */
-    public String getSignature() {
-        return signature;
+    public String getArguments() {
+        return arguments;
     }
 
     /**
@@ -70,20 +70,20 @@ public class DeprecatedApiConfig {
      *
      * @param targetFqcn the fully qualified class name to check
      * @param targetMember the member name to check
-     * @param targetSignature the JVM signature to check (may be null if signature not required)
+     * @param targetArguments the arguments list to check (may be null if arguments not required)
      * @return true if this configuration matches the target API
      */
-    public boolean matches(String targetFqcn, String targetMember, String targetSignature) {
+    public boolean matches(String targetFqcn, String targetMember, String targetArguments) {
         if (targetFqcn == null || targetMember == null) {
             return false;
         }
         if (!targetFqcn.equals(this.fqcn) || !targetMember.equals(this.member)) {
             return false;
         }
-        if (this.signature == null || this.signature.isEmpty()) {
+        if (this.arguments == null || this.arguments.isEmpty()) {
             return true;
         }
-        return this.signature.equals(targetSignature);
+        return this.arguments.equals(targetArguments);
     }
 
     /**

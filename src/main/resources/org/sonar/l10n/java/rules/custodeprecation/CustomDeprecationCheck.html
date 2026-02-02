@@ -26,10 +26,10 @@
     <td>Method or field name. Use <code>&lt;init&gt;</code> for constructors</td>
   </tr>
   <tr>
-    <td><code>signature</code></td>
+    <td><code>arguments</code></td>
     <td>string</td>
     <td>No</td>
-    <td>JVM method descriptor (e.g., <code>(Ljava/lang/String;)V</code>). When null or omitted, all overloads are targeted</td>
+    <td>Source-style argument list (e.g., <code>(java.lang.String)</code>). When null or omitted, all overloads are targeted</td>
   </tr>
   <tr>
     <td><code>migration</code></td>
@@ -45,13 +45,12 @@
   </tr>
 </table>
 
-<h3>JVM Signature Format</h3>
-<p>The <code>signature</code> field uses JVM descriptor notation:</p>
+<h3>Arguments Format</h3>
+<p>The <code>arguments</code> field uses source-style notation:</p>
 <ul>
-  <li><code>I</code> = int, <code>Z</code> = boolean, <code>V</code> = void, <code>J</code> = long, <code>F</code> = float, <code>D</code> = double</li>
-  <li><code>Ljava/lang/String;</code> = String class</li>
-  <li><code>(Ljava/lang/String;I)V</code> = method taking String and int, returning void</li>
-  <li><code>[Ljava/lang/String;</code> = String[] array</li>
+  <li><code>()</code> for methods or constructors with no parameters</li>
+  <li><code>(java.lang.String,int)</code> for multiple parameters</li>
+  <li><code>(java.lang.String[])</code> for arrays or varargs</li>
 </ul>
 
 <h3>Example Configuration</h3>
@@ -60,30 +59,30 @@
   {
     "fqcn": "com.example.OldApi",
     "member": "oldMethod",
-    "signature": null,
+    "arguments": null,
     "migration": "Use com.example.NewApi#newMethod() instead",
     "note": "Will be removed in v3.0"
   },
   {
     "fqcn": "com.example.Constants",
     "member": "OLD_CONSTANT",
-    "signature": null,
+    "arguments": null,
     "migration": "Use Constants.NEW_CONSTANT",
     "note": ""
   },
   {
     "fqcn": "com.example.Api",
     "member": "process",
-    "signature": "(Ljava/lang/String;)V",
+    "arguments": "(java.lang.String)",
     "migration": "Use processNew(String) instead",
     "note": "Only the String variant is deprecated"
   },
   {
     "fqcn": "com.example.Builder",
     "member": "&lt;init&gt;",
-    "signature": "(Ljava/lang/String;Ljava/lang/String;)V",
+    "arguments": "(java.lang.String,java.lang.String)",
     "migration": "Use the builder pattern instead",
-    "note": "Specific constructor signature"
+    "note": "Specific constructor arguments"
   }
 ]
 </pre>

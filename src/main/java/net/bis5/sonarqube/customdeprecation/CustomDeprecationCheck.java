@@ -33,12 +33,12 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
 
     /**
      * JSON array configuration of deprecated APIs to detect.
-     * Each element must contain fqcn, member, optional signature, migration, and optional note fields.
+     * Each element must contain fqcn, member, optional arguments, migration, and optional note fields.
      * Default is an empty array, meaning no APIs are marked as deprecated.
      */
     @RuleProperty(
         key = "deprecatedApis",
-        description = "JSON array of deprecated API configurations. Each element must have: fqcn (fully qualified class name), member (method/field name or '<init>' for constructors), signature (optional JVM format), migration (recommended action), note (optional context)",
+        description = "JSON array of deprecated API configurations. Each element must have: fqcn (fully qualified class name), member (method/field name or '<init>' for constructors), arguments (optional source-style list), migration (recommended action), note (optional context)",
         type = "TEXT",
         defaultValue = "[]"
     )
@@ -87,8 +87,8 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
         }
         String fqcn = fullyQualifiedName(methodSymbol.owner());
         String member = methodSymbol.name();
-        String signature = signatureFromMethodSymbol(methodSymbol);
-        checkAndReport(tree, fqcn, member, signature);
+        String arguments = argumentsFromMethodSymbol(methodSymbol);
+        checkAndReport(tree, fqcn, member, arguments);
     }
 
     private void visitNewClass(NewClassTree tree) {
@@ -98,8 +98,8 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
         }
         String fqcn = fullyQualifiedName(constructorSymbol.owner());
         String member = "<init>";
-        String signature = signatureFromConstructorSymbol(constructorSymbol);
-        checkAndReport(tree, fqcn, member, signature);
+        String arguments = argumentsFromConstructorSymbol(constructorSymbol);
+        checkAndReport(tree, fqcn, member, arguments);
     }
 
     private void visitMemberSelect(MemberSelectExpressionTree tree) {
@@ -154,12 +154,12 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
         return false;
     }
 
-    private void checkAndReport(Tree tree, String fqcn, String member, String signature) {
+    private void checkAndReport(Tree tree, String fqcn, String member, String arguments) {
         if (configs == null || configs.isEmpty()) {
             return;
         }
         Optional<DeprecatedApiConfig> matched = configs.stream()
-            .filter(config -> config.matches(fqcn, member, signature))
+            .filter(config -> config.matches(fqcn, member, arguments))
             .findFirst();
 
         if (matched.isPresent()) {
@@ -183,85 +183,35 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
         return symbol.type().fullyQualifiedName();
     }
 
-    private static String signatureFromMethodSymbol(Symbol.MethodSymbol methodSymbol) {
-        String params = methodSymbol.parameterTypes().stream()
-            .map(CustomDeprecationCheck::descriptorForType)
-            .collect(Collectors.joining());
+    private static String argumentsFromMethodSymbol(Symbol.MethodSymbol methodSymbol) {
+        return argumentsFromTypes(methodSymbol.parameterTypes());
+    }
 
-        String returnDescriptor = "V";
-        Symbol.TypeSymbol returnTypeSymbol = methodSymbol.returnType();
-        if (returnTypeSymbol != null) {
-            returnDescriptor = descriptorForType(returnTypeSymbol.type());
+    private static String argumentsFromConstructorSymbol(Symbol.MethodSymbol methodSymbol) {
+        return argumentsFromTypes(methodSymbol.parameterTypes());
+    }
+
+    private static String argumentsFromTypes(List<Type> types) {
+        if (types == null || types.isEmpty()) {
+            return "()";
         }
-        return "(" + params + ")" + returnDescriptor;
+        String params = types.stream()
+            .map(CustomDeprecationCheck::argumentTypeName)
+            .collect(Collectors.joining(","));
+        return "(" + params + ")";
     }
 
-    private static String signatureFromConstructorSymbol(Symbol.MethodSymbol methodSymbol) {
-        String params = methodSymbol.parameterTypes().stream()
-            .map(CustomDeprecationCheck::descriptorForType)
-            .collect(Collectors.joining());
-        return "(" + params + ")V";
-    }
-
-    private static String descriptorForType(Type type) {
+    private static String argumentTypeName(Type type) {
         if (type == null || type.isUnknown()) {
-            return "Ljava/lang/Object;";
+            return "java.lang.Object";
         }
-        if (type.isVoid()) {
-            return "V";
-        }
-
         String fqn = type.fullyQualifiedName();
         if (fqn == null || fqn.isEmpty()) {
             fqn = type.name();
         }
         if (fqn == null || fqn.isEmpty()) {
-            return "Ljava/lang/Object;";
+            return "java.lang.Object";
         }
-
-        int arrayDimensions = 0;
-        while (fqn.endsWith("[]")) {
-            arrayDimensions++;
-            fqn = fqn.substring(0, fqn.length() - 2);
-        }
-
-        String baseDescriptor = primitiveDescriptor(fqn);
-        if (baseDescriptor == null) {
-            baseDescriptor = "L" + fqn.replace('.', '/') + ";";
-        }
-
-        if (arrayDimensions == 0) {
-            return baseDescriptor;
-        }
-        StringBuilder arrayPrefix = new StringBuilder();
-        for (int i = 0; i < arrayDimensions; i++) {
-            arrayPrefix.append('[');
-        }
-        return arrayPrefix + baseDescriptor;
-    }
-
-    private static String primitiveDescriptor(String primitiveName) {
-        switch (primitiveName) {
-            case "boolean":
-                return "Z";
-            case "byte":
-                return "B";
-            case "char":
-                return "C";
-            case "short":
-                return "S";
-            case "int":
-                return "I";
-            case "long":
-                return "J";
-            case "float":
-                return "F";
-            case "double":
-                return "D";
-            case "void":
-                return "V";
-            default:
-                return null;
-        }
+        return fqn;
     }
 }
