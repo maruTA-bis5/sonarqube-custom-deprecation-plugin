@@ -32,8 +32,7 @@ public class CustomDeprecationRulesDefinition implements RulesDefinition {
 
         NewRule rule = repository.createRule(RULE_KEY)
             .setName("Custom deprecated API should not be used")
-            .setHtmlDescription(
-                "<p>This rule detects usage of APIs marked as deprecated in your project's configuration.</p>")
+            .setHtmlDescription(getClass().getResource("/org/sonar/l10n/java/rules/custodeprecation/CustomDeprecation.html"))
             .setSeverity("MINOR");
 
         rule.createParam("deprecatedApis")
