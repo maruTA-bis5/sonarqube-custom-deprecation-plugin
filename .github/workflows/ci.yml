@@ -39,6 +39,10 @@ jobs:
       - name: Build and test
         run: mvn -B clean verify
 
+      - name: Ensure full git history (JDK 17 only)
+        if: matrix.java-version == '17'
+        run: git fetch --unshallow || git fetch --all --tags
+
       - name: SonarQube analysis (JDK 17 only)
         if: matrix.java-version == '17'
         env:
