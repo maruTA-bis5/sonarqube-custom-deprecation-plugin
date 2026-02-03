@@ -203,16 +203,17 @@
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
-        <version>1.21.0.505</version>
+        <version>1.25.1.3002</version>
         <extensions>true</extensions>
         <configuration>
           <pluginKey>custodeprecation</pluginKey>
           <pluginClass>net.bis5.sonarqube.customdeprecation.CustomDeprecationPlugin</pluginClass>
           <pluginName>Custom Deprecation</pluginName>
           <pluginDescription>Detects usage of project-specific deprecated APIs</pluginDescription>
+          <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
           <requirePlugins>java:${sonarjava.version}</requirePlugins>
+          <requiredForLanguages>java</requiredForLanguages>
           <pluginIssueTrackerUrl>https://github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin/issues</pluginIssueTrackerUrl>
-          <sonarQubeMinVersion>9.9</sonarQubeMinVersion>
           <jreMinVersion>17</jreMinVersion>
           <sonarLintSupported>true</sonarLintSupported>
           <skipDependenciesPackaging>true</skipDependenciesPackaging>
