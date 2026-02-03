@@ -30,6 +30,8 @@ public class CustomDeprecationCheckRegistrar implements CheckRegistrar {
 
     /**
      * Lists all the main checks provided by the plugin
+     *
+     * @return list of check classes registered by this plugin
      */
     public static List<Class<? extends JavaCheck>> checkClasses() {
         return Collections.singletonList(CustomDeprecationCheck.class);
