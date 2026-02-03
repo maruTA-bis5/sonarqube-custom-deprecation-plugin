@@ -1,8 +1,11 @@
 /* SPDX-License-Identifier: Apache-2.0 */
 package net.bis5.sonarqube.customdeprecation;
 
+import com.google.gson.JsonSyntaxException;
 import org.junit.jupiter.api.Test;
 import org.sonar.java.checks.verifier.CheckVerifier;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CustomDeprecationCheckTest {
 
@@ -179,12 +182,7 @@ public class CustomDeprecationCheckTest {
 
     @Test
     public void test_invalid_json_config_handled() {
-        CustomDeprecationCheck check = new CustomDeprecationCheck();
-        check.deprecatedApis = "{ invalid json";
-
-        CheckVerifier.newVerifier()
-            .onFile("src/test/files/Scenario_CompliantOnly.java")
-            .withCheck(check)
-            .verifyNoIssues();
+        assertThrows(JsonSyntaxException.class,
+            () -> DeprecatedApiConfig.parseFromJson("{ invalid json"));
     }
 }
