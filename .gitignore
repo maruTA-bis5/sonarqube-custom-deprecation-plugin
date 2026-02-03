@@ -1,6 +1,9 @@
 # Maven
 /target/
 
+# JReleaser
+/out/
+
 # Java
 *.class
 *.jar

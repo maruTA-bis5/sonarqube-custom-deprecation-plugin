@@ -1,0 +1,65 @@
+project:
+  name: sonarqube-custom-deprecation-plugin
+  description: Detects usage of project-specific deprecated APIs in Java code
+  longDescription: |
+    A SonarQube plugin that detects usage of project-specific deprecated APIs in Java code through JSON configuration.
+    It extends SonarQube's Java analyzer to report custom deprecations not marked with @Deprecated.
+  website: https://github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin
+  authors:
+    - Takayuki Maruyama
+  license: Apache-2.0
+  inceptionYear: 2026
+  tags:
+    - sonarqube
+    - java
+    - plugin
+    - deprecation
+    - static-analysis
+  java:
+    groupId: net.bis5.sonarqube
+    artifactId: sonarqube-custom-deprecation-plugin
+    version: 17
+
+release:
+  github:
+    overwrite: true
+    changelog:
+      formatted: ALWAYS
+      preset: conventional-commits
+      contributors:
+        format: '- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}'
+      labelers:
+        - label: 'feature'
+          title: 'regex:^(?:feat(?:ure)?)[:\(].+'
+        - label: 'bug'
+          title: 'regex:^(?:fix|bug)[:\(].+'
+        - label: 'documentation'
+          title: 'regex:^docs[:\(].+'
+        - label: 'chore'
+          title: 'regex:^chore[:\(].+'
+        - label: 'dependencies'
+          title: 'regex:^(?:deps|build)[:\(].+'
+      categories:
+        - title: '🚀 Features'
+          labels:
+            - 'feature'
+        - title: '🐛 Bug Fixes'
+          labels:
+            - 'bug'
+        - title: '📝 Documentation'
+          labels:
+            - 'documentation'
+        - title: '🔧 Chores'
+          labels:
+            - 'chore'
+        - title: '⬆️ Dependencies'
+          labels:
+            - 'dependencies'
+      replacers:
+        - search: '\[maven-release-plugin\]'
+
+distributions:
+  sonarqube-custom-deprecation-plugin:
+    type: SINGLE_JAR
+    artifacts:
+      - path: target/{{distributionName}}-{{projectVersion}}.jar
