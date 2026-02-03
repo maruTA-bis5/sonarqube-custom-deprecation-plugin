@@ -133,8 +133,7 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
 
     private boolean isPartOfMethodInvocation(IdentifierTree tree) {
         Tree parent = tree.parent();
-        if (parent instanceof MethodInvocationTree) {
-            MethodInvocationTree invocationTree = (MethodInvocationTree) parent;
+        if (parent instanceof MethodInvocationTree invocationTree) {
             return invocationTree.methodSelect() == tree;
         }
         return false;
@@ -147,8 +146,7 @@ public class CustomDeprecationCheck extends IssuableSubscriptionVisitor {
 
     private boolean isVariableDeclarationIdentifier(IdentifierTree tree) {
         Tree parent = tree.parent();
-        if (parent instanceof org.sonar.plugins.java.api.tree.VariableTree) {
-            org.sonar.plugins.java.api.tree.VariableTree variableTree = (org.sonar.plugins.java.api.tree.VariableTree) parent;
+        if (parent instanceof org.sonar.plugins.java.api.tree.VariableTree variableTree) {
             return variableTree.simpleName() == tree;
         }
         return false;
