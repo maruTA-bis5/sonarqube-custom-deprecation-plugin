@@ -45,6 +45,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{ inputs.releaseVersion }}
           NEXT_VERSION: ${{ inputs.nextSnapshotVersion }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: mvn -B -P release release:prepare -DreleaseVersion="${RELEASE_VERSION}" -DdevelopmentVersion="${NEXT_VERSION}"
 
       - name: Perform release
