@@ -30,7 +30,7 @@
 
   <scm>
     <connection>scm:git:https://github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin.git</developerConnection>
+    <developerConnection>scm:git:https://github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin.git</developerConnection>
     <url>https://github.com/maruTA-bis5/sonarqube-custom-deprecation-plugin</url>
     <tag>HEAD</tag>
   </scm>
