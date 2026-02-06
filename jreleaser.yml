@@ -39,22 +39,6 @@ release:
           title: 'regex:^chore[:\(].+'
         - label: 'dependencies'
           title: 'regex:^(?:deps|build)[:\(].+'
-      categories:
-        - title: '🚀 Features'
-          labels:
-            - 'feature'
-        - title: '🐛 Bug Fixes'
-          labels:
-            - 'bug'
-        - title: '📝 Documentation'
-          labels:
-            - 'documentation'
-        - title: '🔧 Chores'
-          labels:
-            - 'chore'
-        - title: '⬆️ Dependencies'
-          labels:
-            - 'dependencies'
       replacers:
         - search: '\[maven-release-plugin\]'
 
